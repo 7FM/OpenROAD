@@ -448,7 +448,7 @@ void FlexDR::getBatchInfo(int& batchStepX, int& batchStepY)
 
 void FlexDR::searchRepair(const SearchRepairArgs& args)
 {
-  const int iter = (iter_++) % 64;
+  const int iter = iter_++;
   const int size = args.size;
   const int offset = args.offset;
   const int mazeEndIter = args.mazeEndIter;
@@ -466,8 +466,9 @@ void FlexDR::searchRepair(const SearchRepairArgs& args)
     return;
   }
   if (dist_on_) {
-    if ((iter % 10 == 0 && iter != 60) || iter == 3 || iter == 15) {
-      globals_path_ = fmt::format("{}globals.{}.ar", dist_dir_, iter);
+    const auto mod_iter = iter % 64;
+    if ((mod_iter % 10 == 0 && mod_iter != 60) || mod_iter == 3 || mod_iter == 15) {
+      globals_path_ = fmt::format("{}globals.{}.ar", dist_dir_, mod_iter);
       router_->writeGlobals(globals_path_.c_str());
     }
   }
